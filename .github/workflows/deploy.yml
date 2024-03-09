@@ -11,17 +11,19 @@ jobs:
   test:
     environment: testing
     runs-on: ubuntu-latest
-    container:
-      image: node:16
+    # container:
+    #   image: node:16
     env:
       MONGODB_CONNECTION_PROTOCOL: mongodb # mongodb+srv
-      MONGODB_CLUSTER_ADDRESS: mongodb # testingcluster.69inel3.mongodb.net,  service name can be used to esablish connection with container service, github manages networking
+      MONGODB_CLUSTER_ADDRESS: 127.0.0.1:27017 # mongodb # testingcluster.69inel3.mongodb.net, service name can be used to esablish connection with container service (only if job is in container), github manages networking
       MONGODB_USERNAME: root # ${{ secrets.MONGODB_USERNAME }}
       MONGODB_PASSWORD: example # ${{ secrets.MONGODB_PASSWORD }}
       PORT: 8080
     services: # always runs on containers
       mongodb:
         image: mongo
+        ports:
+          - 27017:27017 # open port if job is runing on runner machine, not in container
         env:
           MONGO_INITDB_ROOT_USERNAME: root
           MONGO_INITDB_ROOT_PASSWORD: example
